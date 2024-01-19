@@ -13,9 +13,8 @@ const Image = (props) => {
   const dateAdded = new Date(searchParams.get("dateAdded")).toLocaleString();
   
     useEffect(() => {
-    // Scroll to the top when the component mounts
     window.scrollTo(0, 0);
-  }, []); // The empty dependency array ensures the effect runs only once on mount
+  }, []);
 
   return (
     <>
