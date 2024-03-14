@@ -1,6 +1,6 @@
 # Bald Bible
 
-A Full-Stack MERN project, a Pinterest-style design supportive app, promoting positivity for bald individuals. Javascript. Tech Stack: React, Express, Node.js, MongoDB. Testing: Jest.
+A Full-Stack MERN project, a Pinterest-style design supportive app, promoting positivity for bald individuals. Tech Stack: Javascript, React, Express, Node.js, MongoDB. Testing: Jest.
 
 ## Run Bald Bible in dev mode
 Start the frontend and backend servers together.
