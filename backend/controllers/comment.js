@@ -22,8 +22,6 @@ exports.getAllComments = async (req, res, next) => {
   }
 };
 
-
-
 exports.addComment = async (req, res, next) => {
   try {
     
