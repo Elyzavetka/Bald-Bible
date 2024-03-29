@@ -28,9 +28,7 @@ exports.addComment = async (req, res, next) => {
   try {
     
     const { content } = req.body;
-    const imageId = req.params.id; // problem
-    // When you define a route with a parameter like :imageId, you can access its value using req.params.imageId. 
-    // This allows you to dynamically handle requests based on the value provided in the URL.
+    const imageId = req.params.id; 
     console.log( req.body)
     // Check if the image exists
     const image = await Image.findById(imageId);
@@ -49,10 +47,6 @@ exports.addComment = async (req, res, next) => {
     
     const saveComment = await comment.save();
     console.log(saveComment)
-    // Find the user by ID
-    // const user = await User.findById(req.body.userId);
-
-    // Add the comment to the image
     image.comments.push(saveComment._id);
     await image.save();
     
