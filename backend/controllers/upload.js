@@ -13,15 +13,13 @@ const ImageController = {
       const imageUrl = uploadedImage.secure_url;
       const dateAdded = uploadedImage.created_at;
 
-      // Create a new instance of the Image model
       const newImage = new Image({
         userId: userId,
         username: username,
         imageUrl: imageUrl,
-        dateAdded: dateAdded 
+        dateAdded: dateAdded,
       });
 
-      // Save the newImage to the database
       await newImage.save();
 
       res.status(201).json({ message: "Image saved successfully!" });
@@ -33,4 +31,3 @@ const ImageController = {
 };
 
 module.exports = ImageController;
-
