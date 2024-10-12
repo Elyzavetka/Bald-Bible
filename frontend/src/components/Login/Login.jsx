@@ -1,82 +1,95 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
-import "./Login.css"
-import baseUrl from '../../../util/baseUrl';
-import Button from "../Button/Button.jsx"
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Login.css";
+import baseUrl from "../../../util/baseUrl";
+import Button from "../Button/Button.jsx";
 
 const Login = () => {
-    // For login
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [errorMessage, setErrorMessage] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-// Sets page title
-useEffect(() => {
-        document.title = 'Login';
-    }, []);
+  useEffect(() => {
+    document.title = "Login";
+  }, []);
 
-//Logs user in
-const handleLoginSubmit = async (event) => {
+  const handleLoginSubmit = async (event) => {
     event.preventDefault();
 
     let response = await fetch(`${baseUrl}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-        'Content-Type': 'application/json',
-    },
-        body: JSON.stringify({ email: email, password: password })
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: email, password: password }),
     });
     if (response.status === 200) {
-      // GOOD NEWS.
-        console.log("login successful");
-        let data = await response.json();
-        console.log(data)
-        window.localStorage.setItem("token", data.token);
-        window.localStorage.setItem("userId", data.userId);
-        window.localStorage.setItem("username", data.username);
-        navigate('/');
+      console.log("login successful");
+      let data = await response.json();
+      console.log(data);
+      window.localStorage.setItem("token", data.token);
+      window.localStorage.setItem("userId", data.userId);
+      window.localStorage.setItem("username", data.username);
+      navigate("/");
     } else {
-      // BAD NEWS.
-        setErrorMessage("Email or Password incorrect,\nplease try again")
+      setErrorMessage("Email or Password incorrect,\nplease try again");
     }
-}
+  };
 
-// For login
-const handleEmailChange = (event) => {
-    setEmail(event.target.value)
-}
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
 
-const handlePasswordChange = (event) => {
-    setPassword(event.target.value)
-}
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
 
-    return (
+  return (
     <>
-        {/* This is the login form */}
-    <div className="container">
-    <div className="top"></div>
-    <div className="bottom"></div>
-    <div className="center">
-        <div className='loginform'>
+      <div className="container">
+        <div className="top"></div>
+        <div className="bottom"></div>
+        <div className="center">
+          <div className="loginform">
             <form onSubmit={handleLoginSubmit}>
-            <h1>Login</h1>
-            <input id="login-email" type="email" placeholder="Email" value={ email } onChange={handleEmailChange} />
-            <input id="login-password" type="password" placeholder="Password" value={ password } onChange={handlePasswordChange} />
-            <Button id="login-submit" type="submit" aria-label="Login" className="btn">Login</Button>
-            </form></div>
-            <br></br>
-            {errorMessage && (
+              <h1>Login</h1>
+              <input
+                id="login-email"
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={handleEmailChange}
+              />
+              <input
+                id="login-password"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+              <Button
+                id="login-submit"
+                type="submit"
+                aria-label="Login"
+                className="btn"
+              >
+                Login
+              </Button>
+            </form>
+          </div>
+          <br></br>
+          {errorMessage && (
             <div className="error-message">
-                <p>{errorMessage}</p>
+              <p>{errorMessage}</p>
             </div>
-            )}
-    <h2>&nbsp;</h2>
-    </div>
-    </div>
-        </>
-);
+          )}
+          <h2>&nbsp;</h2>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default Login;

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { formatDistanceToNow } from 'date-fns'; // Import the necessary function
-import Button from '../Button/Button';
-import './comment.css'; // Import your CSS file
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { formatDistanceToNow } from "date-fns"; // Import the necessary function
+import Button from "../Button/Button";
+import "./comment.css"; // Import your CSS file
 
 const Modal = ({ closeModal, comments, onDeleteComment, userId }) => (
   <div className="modal-overlay" onClick={closeModal}>
@@ -17,10 +17,15 @@ const Modal = ({ closeModal, comments, onDeleteComment, userId }) => (
             <div key={comment._id} className="comment">
               <p className="comment-content">{comment.content}</p>
               <p className="comment-time">
-                {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
+                {formatDistanceToNow(new Date(comment.createdAt), {
+                  addSuffix: true,
+                })}
               </p>
               {onDeleteComment && userId === comment.userId && (
-                <button className="commentbutton" onClick={() => onDeleteComment(comment._id)}>
+                <button
+                  className="commentbutton"
+                  onClick={() => onDeleteComment(comment._id)}
+                >
                   Delete Comment
                 </button>
               )}
@@ -32,17 +37,18 @@ const Modal = ({ closeModal, comments, onDeleteComment, userId }) => (
   </div>
 );
 
-
 const Comments = ({ imageId }) => {
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState('');
-  const [token, setToken] = useState(window.localStorage.getItem('token'));
+  const [newComment, setNewComment] = useState("");
+  const [token, setToken] = useState(window.localStorage.getItem("token"));
   const [showModal, setShowModal] = useState(false);
-  const userId = window.localStorage.getItem('userId');
+  const userId = window.localStorage.getItem("userId");
 
   const onDeleteComment = async (commentId) => {
     try {
-      const confirmDelete = window.confirm('Are you sure you want to delete this comment?');
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this comment?"
+      );
       if (!confirmDelete) {
         return;
       }
@@ -56,21 +62,24 @@ const Comments = ({ imageId }) => {
 
       await axios.delete(url, options);
 
-      const response = await axios.get(`http://localhost:8080/api/images/${imageId}/comments`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `http://localhost:8080/api/images/${imageId}/comments`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setComments(response.data);
       console.log(response.data);
     } catch (error) {
-      console.error('Error deleting comment:', error);
+      console.error("Error deleting comment:", error);
     }
   };
 
   useEffect(() => {
     // Fetch existing comments for the image
-    console.log('Fetching comments for imageId:', imageId);
+    console.log("Fetching comments for imageId:", imageId);
     axios
       .get(`http://localhost:8080/api/images/${imageId}/comments`, {
         headers: {
@@ -78,23 +87,23 @@ const Comments = ({ imageId }) => {
         },
       })
       .then((response) => {
-        console.log('Comments:', response);
+        console.log("Comments:", response);
         setComments(response.data || []); // Ensure comments is an array
       })
-      .catch((error) => console.error('Error fetching comments:', error));
+      .catch((error) => console.error("Error fetching comments:", error));
   }, [imageId, token]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const token = window.localStorage.getItem('token');
+      const token = window.localStorage.getItem("token");
 
       // Check if the token is available
       if (!token) {
         // Token is missing, ask the user if they want to go to the login page
         const goToLoginPage = window.confirm(
-          'You need to be logged in to add a comment. Do you want to go to the login page?'
+          "You need to be logged in to add a comment. Do you want to go to the login page?"
         );
 
         if (goToLoginPage) {
@@ -121,41 +130,36 @@ const Comments = ({ imageId }) => {
       await axios.post(url, body, options);
 
       // Refresh the comments after submitting a new comment
-      const response = await axios.get(`http://localhost:8080/api/images/${imageId}/comments`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `http://localhost:8080/api/images/${imageId}/comments`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setComments(response.data);
       console.log(response.data);
-
-      // Clear the input field
-      setNewComment('');
+      setNewComment("");
     } catch (error) {
-      console.error('Error adding comment:', error);
+      console.error("Error adding comment:", error);
     }
   };
 
   const handleShowComments = () => {
-    const token = window.localStorage.getItem('token');
-  
-    // Check if the token is available
+    const token = window.localStorage.getItem("token");
+
     if (!token) {
-      // Token is missing, ask the user if they want to go to the login page
       const goToLoginPage = window.confirm(
-        'You need to be logged in to view comments. Do you want to go to the login page?'
+        "You need to be logged in to view comments. Do you want to go to the login page?"
       );
-  
+
       if (goToLoginPage) {
-        // Redirect to the login page
         window.location.href = `/login`;
       }
-  
-      // User decided not to go to the login page or canceled the prompt
       return;
     }
-  
-    // Continue with showing comments
+
     setShowModal(true);
   };
 
@@ -172,21 +176,33 @@ const Comments = ({ imageId }) => {
             <textarea
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              rows={5} // Adjust the number of rows as needed
+              rows={5}
               cols={60}
             />
           </label>
-          <button className="commentbutton" type="submit">Add Comment</button>
+          <button className="commentbutton" type="submit">
+            Add Comment
+          </button>
         </form>
         <br></br>
-        <button className="commentbutton" type="button" onClick={handleShowComments}>
+        <button
+          className="commentbutton"
+          type="button"
+          onClick={handleShowComments}
+        >
           Show Comments
         </button>
-        {showModal && <Modal closeModal={closeModal} comments={comments} onDeleteComment={onDeleteComment} userId={userId} />}
+        {showModal && (
+          <Modal
+            closeModal={closeModal}
+            comments={comments}
+            onDeleteComment={onDeleteComment}
+            userId={userId}
+          />
+        )}
       </div>
     </div>
   );
 };
 
 export default Comments;
-

@@ -22,7 +22,7 @@ const Feed = () => {
         return response.json();
       })
       .then((data) => {
-        setImages(data.reverse()); // Reverse the array before setting in the state
+        setImages(data.reverse());
       })
       .catch((error) => {
         console.error("Error fetching images:", error.message);
@@ -33,7 +33,6 @@ const Feed = () => {
     fetch("http://localhost:8080/api/images", {})
       .then((response) => response.json())
       .then((data) => {
-        // Reverse the order of images here
         setImages(data.reverse());
       })
       .catch((error) => {
@@ -43,15 +42,30 @@ const Feed = () => {
 
   const showImage = (event, imageId, username, dateAdded) => {
     const imageSrc = event.target.src;
-    navigate(`/image?imageSrc=${imageSrc}&imageId=${imageId}&username=${username}&dateAdded=${dateAdded}`);
+    navigate(
+      `/image?imageSrc=${imageSrc}&imageId=${imageId}&username=${username}&dateAdded=${dateAdded}`
+    );
   };
 
   return (
     <div id="image-layout-outer-box" className="image-layout">
-      <Box id="image-layout-inner-box" sx={{ width: "400", overflowy: "scroll" }}>
-        <ImageList className="image-list" id="image-list" variant="masonry" cols={3} gap={0}>
+      <Box
+        id="image-layout-inner-box"
+        sx={{ width: "400", overflowy: "scroll" }}
+      >
+        <ImageList
+          className="image-list"
+          id="image-list"
+          variant="masonry"
+          cols={3}
+          gap={0}
+        >
           {images.map((item) => (
-            <ImageListItem key={item._id} id={`image-${item.img}`} className="image-column">
+            <ImageListItem
+              key={item._id}
+              id={`image-${item.img}`}
+              className="image-column"
+            >
               <img
                 src={`${item.imageUrl}`}
                 alt={item.title}
@@ -59,7 +73,10 @@ const Feed = () => {
                 height={item.height}
                 loading="lazy"
                 style={{ height: `${item.height}px` }}
-                onClick={(event) => showImage(event, item._id, item.username, item.dateAdded)} className="image"
+                onClick={(event) =>
+                  showImage(event, item._id, item.username, item.dateAdded)
+                }
+                className="image"
               />
             </ImageListItem>
           ))}
@@ -70,4 +87,3 @@ const Feed = () => {
 };
 
 export default Feed;
-
